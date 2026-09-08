@@ -1,0 +1,24 @@
+# Credentials — never commit these.
+.env
+.env.*
+!.env.example
+
+# Local configuration (contains your subdomain and output path).
+config.json
+config.json.bak
+config.json.tmp
+
+# Sync artifacts.
+*.fmxpart
+.fmx_sync_state.json
+fmx-attachments/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS cruft
+.DS_Store
+Thumbs.db

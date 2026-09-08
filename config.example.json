@@ -1,0 +1,75 @@
+{
+  "_comment": [
+    "Copy this file to config.json and edit it. config.json is gitignored.",
+    "Credentials are NOT stored here. Set FMX_EMAIL and FMX_PASSWORD as environment",
+    "variables, or pass --env-file, or let the script prompt you.",
+    "Run --discover to see which modules your tenant actually has, and to get a",
+    "ready-to-paste version of the list below."
+  ],
+
+  "subdomain": "your-subdomain",
+  "outputDirectory": "./fmx-attachments",
+
+  "pageSize": 200,
+  "timeoutSeconds": 60,
+  "throttleSeconds": 0.0,
+
+  "_modules_comment": [
+    "name    = the folder created under outputDirectory, and the --modules selector.",
+    "apiPath = the real API path. These are NOT derivable from the module name:",
+    "          the Schedule module lives at /scheduling/requests, and",
+    "          /schedule-requests returns 404.",
+    "fields  = which parts of each record to fetch. This is REQUIRED, not an",
+    "          optimisation: attachments added to a response or comment live on the",
+    "          record's actions, and actions are not in the default payload. Without",
+    "          the actions(...) expansion below, those attachments are invisible.",
+    "          It also shrinks responses enormously (one module: 12.4 MB -> 297 KB).",
+    "          Beware: this API silently ignores field names it does not recognise,",
+    "          so a typo means missing attachments, not an error. The script warns",
+    "          if a projected collection never comes back.",
+    "Modules your tenant does not have simply 404 and are skipped."
+  ],
+
+  "modules": [
+    { "name": "maintenance-requests", "apiPath": "/maintenance-requests", "enabled": true,
+      "fields": "id,customFields(attachmentIDs),actions(id,createdTimeUtc,isPrivate,customFields(attachmentIDs))" },
+
+    { "name": "technology-requests", "apiPath": "/technology-requests", "enabled": true,
+      "fields": "id,customFields(attachmentIDs),actions(id,createdTimeUtc,isPrivate,customFields(attachmentIDs))" },
+
+    { "name": "transportation-requests", "apiPath": "/transportation-requests", "enabled": true,
+      "fields": "id,customFields(attachmentIDs),actions(id,createdTimeUtc,isPrivate,customFields(attachmentIDs))" },
+
+    { "name": "planning-requests", "apiPath": "/planning-requests", "enabled": true,
+      "fields": "id,customFields(attachmentIDs),actions(id,createdTimeUtc,isPrivate,customFields(attachmentIDs))" },
+
+    { "name": "schedule-requests", "apiPath": "/scheduling/requests", "enabled": true,
+      "fields": "id,customFields(attachmentIDs)" },
+
+    { "name": "planned-maintenance-tasks", "apiPath": "/planned-maintenance/tasks", "enabled": true,
+      "fields": "id,customFields(attachmentIDs)" },
+
+    { "name": "purchase-orders", "apiPath": "/purchase-orders", "enabled": true,
+      "fields": "id,customFields(attachmentIDs)" },
+
+    { "name": "invoices", "apiPath": "/invoices", "enabled": true,
+      "fields": "id,customFields(attachmentIDs)" },
+
+    { "name": "equipment", "apiPath": "/equipment", "enabled": true,
+      "fields": "id,customFields(attachmentIDs)" },
+
+    { "name": "buildings", "apiPath": "/buildings", "enabled": true,
+      "fields": "id,customFields(attachmentIDs)" },
+
+    { "_comment": "Occurrences inherit their parent's attachments, so a daily recurring schedule would write one copy per occurrence. Off unless you truly want that.",
+      "name": "schedule-occurrences", "apiPath": "/scheduling/occurrences", "enabled": false,
+      "fields": "id,customFields(attachmentIDs)" },
+
+    { "name": "planned-maintenance-occurrences", "apiPath": "/planned-maintenance/occurrences", "enabled": false,
+      "fields": "id,customFields(attachmentIDs)" },
+
+    { "_comment": "User attachments are more likely to be personal (certifications, contracts). Opt in deliberately.",
+      "name": "users", "apiPath": "/users", "enabled": false,
+      "fields": "id,customFields(attachmentIDs)" }
+  ]
+}
